@@ -2,6 +2,11 @@ export function isDateOnly(value: string): boolean {
   return /^\d{4}-\d{2}-\d{2}$/.test(value.trim());
 }
 
+export function isZeroLikeDate(value: string): boolean {
+  const normalized = value.trim();
+  return normalized.startsWith('0001-01-01') || normalized.startsWith('0000-00-00');
+}
+
 export function toIcsUtcDateTime(value: Date): string {
   const year = value.getUTCFullYear();
   const month = pad(value.getUTCMonth() + 1);
@@ -21,6 +26,10 @@ export function toIcsDate(value: Date): string {
 
 export function parseIsoDateOrNull(value: string | null | undefined): Date | null {
   if (!value) {
+    return null;
+  }
+
+  if (isZeroLikeDate(value)) {
     return null;
   }
 

@@ -56,11 +56,16 @@ export function buildVEventIcs(input: BuildEventInput): string {
 }
 
 export function hasCalendaringSignal(task: VikunjaTask): boolean {
-  return Boolean(task.start_date || task.due_date);
+  return parseIsoDateOrNull(task.start_date) !== null || parseIsoDateOrNull(task.due_date) !== null;
 }
 
 function resolveEventDates(task: VikunjaTask, defaultDurationMinutes: number): EventDateResolution {
-  const startRaw = task.start_date || task.due_date;
+  const startRaw =
+    parseIsoDateOrNull(task.start_date) !== null
+      ? task.start_date
+      : parseIsoDateOrNull(task.due_date) !== null
+        ? task.due_date
+        : null;
   if (!startRaw) {
     throw new Error('Task has no calendaring signal');
   }
@@ -94,7 +99,10 @@ function resolveEventDates(task: VikunjaTask, defaultDurationMinutes: number): E
   }
 
   const endDate = task.end_date ? parseIsoDateOrNull(task.end_date) : null;
-  const resolvedEnd = endDate ?? addMinutes(startDate, defaultDurationMinutes);
+  const resolvedEnd =
+    endDate && endDate.getTime() > startDate.getTime()
+      ? endDate
+      : addMinutes(startDate, defaultDurationMinutes);
 
   return {
     allDay: false,

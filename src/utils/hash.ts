@@ -30,5 +30,8 @@ function normalizeNullable(value: string | null | undefined): string | null {
   }
 
   const normalized = value.trim();
+  if (normalized.startsWith('0001-01-01') || normalized.startsWith('0000-00-00')) {
+    return null;
+  }
   return normalized.length > 0 ? normalized : null;
 }

@@ -48,7 +48,7 @@ Variables:
 - `CALDAV_PASSWORD=...` (app password)
 - `CALDAV_CALENDAR_NAME=
 - `SQLITE_PATH=./data/state.sqlite`
-.
+  .
 
 ## Local run
 

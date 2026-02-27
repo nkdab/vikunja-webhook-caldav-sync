@@ -163,6 +163,18 @@ export class CaldavClient {
         return { href: targetHref, etag };
       }
 
+      if (putResponse.statusCode === 400) {
+        this.logger.error(
+          {
+            href: targetHref,
+            status: putResponse.statusCode,
+            response: truncate(putResponse.bodyText, 500),
+            ical_preview: truncate(input.iCal, 500),
+          },
+          'CalDAV rejected VEVENT payload',
+        );
+      }
+
       if (putResponse.statusCode === 412 && input.etag) {
         const latestEtag = await this.fetchEtag(targetHref);
         const retryHeaders: Record<string, string> = {
