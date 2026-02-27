@@ -1,0 +1,21 @@
+services:
+  vikunja-webhook-caldav-sync:
+    build: .
+    container_name: vikunja-webhook-caldav-sync
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - ./data:/app/data
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.vikunja-caldav.rule=Host(`vikunja-sync.example.com`)
+      - traefik.http.routers.vikunja-caldav.entrypoints=websecure
+      - traefik.http.routers.vikunja-caldav.tls=true
+      - traefik.http.services.vikunja-caldav.loadbalancer.server.port=3000
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true

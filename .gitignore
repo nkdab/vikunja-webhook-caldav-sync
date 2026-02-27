@@ -1,0 +1,10 @@
+node_modules
+npm-debug.log*
+dist
+.env
+.env.*
+coverage
+.DS_Store
+data/*.sqlite
+data/*.sqlite-shm
+data/*.sqlite-wal
